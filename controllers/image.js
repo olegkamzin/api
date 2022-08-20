@@ -15,7 +15,7 @@ class ImagesController {
 				for (const el of img) {
 					const name = dir + genName(16) + '.webp'
 					for (let i = 0; i < sizes.length; i++) {
-						const sizeDir = 'static/' + sizes[i] + '/'
+						const sizeDir = process.env.PATH_IMG + sizes[i] + '/'
 						if (!fs.existsSync(sizeDir)) fs.mkdirSync(sizeDir)
 						const imgDir = sizeDir + dir
 						if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir)
