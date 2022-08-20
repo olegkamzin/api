@@ -3,9 +3,9 @@ import ModelsController from '../controllers/model.js'
 import role from '../middleware/role.js'
 const router = new Router()
 
-router.get('/', ModelsController.getAll)
-router.post('/', role('ADMIN'), ModelsController.create)
-router.put('/:id', role('ADMIN'), ModelsController.edit)
+router.get('/', ModelsController.get)
+router.post('/', role('ADMIN'), ModelsController.post)
+router.put('/:id', role('ADMIN'), ModelsController.put)
 router.delete('/:id', role('ADMIN'), ModelsController.delete)
 
 export default router

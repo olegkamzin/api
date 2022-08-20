@@ -6,7 +6,7 @@ export default function (role) {
 		try {
 			const authorizationHeader = req.headers.authorization
 			if (!authorizationHeader) return next(ApiError.unauthorized('Вы не авторизованы.'))
-			
+
 			const token = authorizationHeader.split(' ')[1]
 			if (!token) return next(ApiError.unauthorized('Вы не авторизованы.'))
 

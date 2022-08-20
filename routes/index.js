@@ -1,6 +1,4 @@
 import Router from 'express'
-const router = new Router()
-
 import product from './product.js'
 import category from './category.js'
 import brand from './brand.js'
@@ -11,6 +9,9 @@ import cart from './cart.js'
 import order from './order.js'
 import filter from './filter.js'
 import image from './image.js'
+import vendor from './vendor.js'
+
+const router = new Router()
 
 router.use('/product', product)
 router.use('/category', category)
@@ -22,5 +23,6 @@ router.use('/cart', cart)
 router.use('/order', order)
 router.use('/filter', filter)
 router.use('/image', image)
+router.use('/vendor', vendor)
 
 export default router

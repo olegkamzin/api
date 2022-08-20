@@ -8,7 +8,7 @@ const schema = new db.Schema({
 	email: { type: String },
 	lastname: { type: String },
 	surname: { type: String },
-	middlename: { type: String },
+	middlename: { type: String }
 })
 
 export default db.model('User', schema)

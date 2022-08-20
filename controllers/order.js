@@ -3,7 +3,7 @@ import Cart from '../models/cart.js'
 import ApiError from '../service/error/ApiError.js'
 
 class OrderController {
-	async create(req, res, next) {
+	async post (req, res, next) {
 		try {
 			const { user } = req.params
 			const cart = await Cart.find({ user })
@@ -11,43 +11,47 @@ class OrderController {
 			const order = await Order.create({ user, products: cart })
 			await Cart.deleteMany({ user })
 			return res.json(order)
-		} catch(e) {
+		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
 	}
-	async get(req, res, next) {
-		try {
-			const { user } = req.params
-			const order = await Order.find({ user: user })
-			return res.json(order)
-		} catch(e) {
-			next(ApiError.badRequest(e.message))
-		}
-	}
-	async getAll(req, res, next) {
-		try {
-			const order = await Order.find()
-			return res.json(order)
-		} catch(e) {
-			next(ApiError.badRequest(e.message))
-		}
-	}
-	async edit(req, res, next) {
+
+	async put (req, res, next) {
 		try {
 			const { id } = req.params
 			const { products, address, other } = req.body
-			const order = await Order.findById(id, { products, address, other  })
+			const order = await Order.findById(id, { products, address, other })
 			return res.json(order)
-		} catch(e) {
+		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
 	}
-	async delete(req, res, next) {
+
+	async get (req, res, next) {
+		try {
+			const { user } = req.params
+			const order = await Order.find({ user })
+			return res.json(order)
+		} catch (e) {
+			next(ApiError.badRequest(e.message))
+		}
+	}
+
+	async getAll (req, res, next) {
+		try {
+			const order = await Order.find()
+			return res.json(order)
+		} catch (e) {
+			next(ApiError.badRequest(e.message))
+		}
+	}
+
+	async delete (req, res, next) {
 		try {
 			const { id } = req.params
 			const order = await Order.findByIdAndDelete(id)
 			return res.json(order)
-		} catch(e) {
+		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
 	}

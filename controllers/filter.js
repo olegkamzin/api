@@ -4,11 +4,11 @@ import Product from '../models/product.js'
 import Brand from '../models/brand.js'
 
 class FilterController {
-	async get(req, res, next) {
+	async get (req, res, next) {
 		try {
 			const { slug } = req.params
-			let category = await Category.findOne({ slug })
-			category.params.push({name: 'Бренд', property: 'brand'})
+			const category = await Category.findOne({ slug })
+			category.params.push({ name: 'Бренд', property: 'brand' })
 			const filter = {}
 			for (const el of category.params) {
 				if (el.property === 'other') continue
@@ -36,7 +36,7 @@ class FilterController {
 				filter[el.property] = param
 			}
 			res.json(filter)
-		} catch(e) {
+		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
 	}

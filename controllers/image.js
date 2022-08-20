@@ -5,7 +5,7 @@ import sharp from 'sharp'
 dotenv.config()
 
 class ImagesController {
-	async upload(req, res, next) {
+	async upload (req, res, next) {
 		try {
 			const { img } = req.files
 			const sizes = [200, 400, 800, null]
@@ -20,7 +20,7 @@ class ImagesController {
 						const imgDir = sizeDir + dir
 						if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir)
 						await sharp(el.data)
-							.resize(sizes[i], sizes[i], {fit: 'inside'})
+							.resize(sizes[i], sizes[i], { fit: 'inside' })
 							.toFile(sizeDir + name)
 					}
 					result.push(name)
@@ -43,7 +43,8 @@ class ImagesController {
 			next(ApiError.badRequest(e))
 		}
 	}
-	async delete(req, res, next) {
+
+	async delete (req, res, next) {
 		try {
 			const { name } = req.query
 			res.json(name)
@@ -58,7 +59,7 @@ const genName = (len) => {
 	let str = ''
 	for (let i = 0; i < len; i++) {
 		const pos = Math.floor(Math.random() * abc.length)
-		str += abc.substring(pos,pos+1)
+		str += abc.substring(pos, pos + 1)
 	}
 	return str
 }

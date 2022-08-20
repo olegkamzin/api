@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
 	origin: process.env.CLIENT_URL,
-	credentials: true,
+	credentials: true
 }))
 app.use(fileUpload())
 app.use(router)
@@ -24,7 +24,7 @@ app.use((req, res) => res.status(404).json({ error: 'Страница не на�
 const start = async () => {
 	try {
 		app.listen(PORT, () => console.log(`✅ Сервер запущен на порту ${PORT}`))
-	} catch(e) {
+	} catch (e) {
 		console.log(e)
 	}
 }
