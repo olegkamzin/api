@@ -21,8 +21,10 @@ class ModelsController {
 		try {
 			const { id } = req.params
 			const { brand } = req.body
-			const brandFind = await Brand.findOne({ name: brand })
-			if (!brandFind) return res.status(400).json('Брэнд не найден')
+			if (brand) {
+				const brandFind = await Brand.findOne({ name: brand })
+				if (!brandFind) return res.status(400).json('Брэнд не найден')
+			}
 			await Models.findByIdAndUpdate(id, { $set: req.body }, { new: true })
 				.then(data => res.json(data))
 				.catch(error => res.status(400).json(error.message))
