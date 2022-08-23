@@ -5,7 +5,7 @@ const schema = new db.Schema({
 	description: { type: String, maxlength: 2000, trim: true },
 	brand: { type: db.Types.ObjectId, ref: 'brands', required: true },
 	rating: { type: Number, max: 5, min: 0 },
-	country: { type: String },
+	country: { type: Array },
 	slug: { type: String, slug: 'name', unique: true },
 	img: { type: Array, required: true }
 })
