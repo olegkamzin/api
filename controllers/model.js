@@ -9,9 +9,8 @@ class ModelsController {
 			const { name, brand, description, rating } = req.body
 			const brandFind = await Brand.findOne({ name: brand })
 			if (!brandFind) return res.status(400).json('Брэнд не найден')
-			return Models.create({ name, brand: brandFind.id, description, rating, slug: genSlug(name, { lower: true }) })
-				.then(data => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Models.create({ name, brand: brandFind.id, description, rating, slug: genSlug(name, { lower: true }) })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -20,14 +19,14 @@ class ModelsController {
 	async put (req, res, next) {
 		try {
 			const { id } = req.params
-			const { brand } = req.body
+			let { brand, name, slug } = req.body
 			if (brand) {
 				const brandFind = await Brand.findOne({ name: brand })
 				if (!brandFind) return res.status(400).json('Брэнд не найден')
 			}
-			await Models.findByIdAndUpdate(id, { $set: req.body }, { new: true })
-				.then(data => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			if (name) slug = genSlug(name, { lower: true })
+			const result = await Models.findByIdAndUpdate(id, { $set: { ...req.body, slug } }, { new: true })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -35,9 +34,8 @@ class ModelsController {
 
 	async get (req, res, next) {
 		try {
-			return Models.find()
-				.then((data) => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Models.find()
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -46,9 +44,8 @@ class ModelsController {
 	async delete (req, res, next) {
 		try {
 			const { id } = req.params
-			return Models.findByIdAndDelete(id)
-				.then((data) => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Models.findByIdAndDelete(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
