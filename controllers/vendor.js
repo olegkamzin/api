@@ -7,11 +7,11 @@ class VendorController {
 			let { page, limit } = req.query
 			page = page || 1
 			limit = limit || 20
-			const vendor = await Vendor.find()
+			const result = await Vendor.find()
 				.populate({ path: 'product', model: 'Product' })
 				.limit(limit)
 				.skip(page * limit - limit)
-			return res.json(vendor)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -20,9 +20,9 @@ class VendorController {
 	async getOne (req, res, next) {
 		try {
 			const { product } = req.params
-			const vendor = await Vendor.findOne({ product })
+			const result = await Vendor.findOne({ product })
 				.populate({ path: 'product', model: 'Product' })
-			return res.json(vendor)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}

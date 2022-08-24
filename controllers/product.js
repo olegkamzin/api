@@ -8,9 +8,8 @@ class ProductController {
 			const { brand, model, category, quantity, price, params } = req.body
 			const validation = await productValidation(category, params)
 			if (validation.error) return next(ApiError.badRequest(validation.error))
-			return Product.create({ brand, model, category, quantity, price, params: validation })
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			const result = await Product.create({ brand, model, category, quantity, price, params: validation })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -22,9 +21,8 @@ class ProductController {
 			const { brand, model, category, quantity, price, params } = req.body
 			const validation = await productValidation(category, params)
 			if (validation.error) return next(ApiError.badRequest(validation.error))
-			return Product.findByIdAndUpdate(id, { brand, model, category, quantity, price, params: validation })
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			const result = await Product.findByIdAndUpdate(id, { brand, model, category, quantity, price, params: validation })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -43,11 +41,10 @@ class ProductController {
 				params[paramName] = req.body[el]
 			}
 			params = JSON.parse(JSON.stringify(params))
-			return Product.find(params)
+			const result = await Product.find(params)
 				.limit(limit)
 				.skip(page * limit - limit)
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -56,11 +53,10 @@ class ProductController {
 	async getOne (req, res, next) {
 		try {
 			const { id } = req.params
-			Product.findById(id)
+			const result = await Product.findById(id)
 				.populate({ path: 'brand', model: 'Brand' })
 				.populate({ path: 'model', model: 'Model' })
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -91,12 +87,11 @@ class ProductController {
 				}
 			}
 			params = JSON.parse(JSON.stringify(params))
-			return Product.find({ category: category._id, ...params })
+			const result = await Product.find({ category: category._id, ...params })
 				.limit(limit)
 				.skip(page * limit - limit)
 				// .select('-price')
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -105,9 +100,8 @@ class ProductController {
 	async delete (req, res, next) {
 		try {
 			const { id } = req.params
-			Product.findByIdAndDelete(id)
-				.then(data => res.json(data))
-				.catch(error => next(ApiError.badRequest(error.message)))
+			const result = await Product.findByIdAndDelete(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -118,7 +112,7 @@ class ProductController {
 
 const productValidation = async (category, params) => {
 	let result = {}
-	if (typeof params !== 'object') return { error: 'Параемтры отправлены не верно (тип должен быть object)' } // если не массив
+	if (typeof params !== 'object') return { error: 'Параметры отправлены не верно (тип должен быть object)' } // если не массив
 	const getCategory = await Category.findById(category).catch(error => { result = { ...result, error: error.message } })
 	if (result.error) return result
 	if (!getCategory) return { error: 'Категория не найдена' } // если категория не найдена

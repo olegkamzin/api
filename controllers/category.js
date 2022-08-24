@@ -18,8 +18,8 @@ class CategoryController {
 				})
 			}
 			console.log(req.body)
-			const category = await Category.create(req.body)
-			res.json(category)
+			const result = await Category.create(req.body)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -31,9 +31,8 @@ class CategoryController {
 			const { name, description, params } = req.body
 			let { slug } = req.body
 			if (!slug) slug = genSlug(name, { lower: true })
-			return Category.findByIdAndUpdate(id, { name, description, slug, params }, { new: true })
-				.then(data => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Category.findByIdAndUpdate(id, { name, description, slug, params }, { new: true })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -41,9 +40,8 @@ class CategoryController {
 
 	async get (req, res, next) {
 		try {
-			return Category.find()
-				.then((data) => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Category.find()
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -52,9 +50,8 @@ class CategoryController {
 	async getOne (req, res, next) {
 		try {
 			const { id } = req.params
-			return Category.findById(id)
-				.then((data) => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Category.findById(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -63,9 +60,8 @@ class CategoryController {
 	async delete (req, res, next) {
 		try {
 			const { id } = req.params
-			return Category.findByIdAndDelete(id)
-				.then((data) => res.json(data))
-				.catch(error => res.status(400).json(error.message))
+			const result = await Category.findByIdAndDelete(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

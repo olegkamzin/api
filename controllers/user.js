@@ -52,7 +52,7 @@ class UserController {
 			const token = TokenService.generateTokens({ id: user._id, role: user.role })
 			await TokenService.saveToken(user._id, token.refreshToken)
 			res.cookie('refreshToken', token.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true })
-			res.json(token)
+			return res.json(token)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -82,7 +82,7 @@ class UserController {
 	async getUsers (req, res, next) {
 		try {
 			const user = await User.find()
-			res.json(user)
+			return res.json(user)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -92,7 +92,7 @@ class UserController {
 		try {
 			const { id } = req.params
 			const user = await User.findByIdAndDelete(id)
-			res.json(user)
+			return res.json(user)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -102,7 +102,7 @@ class UserController {
 		try {
 			const { id } = req.params
 			await User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
-			res.json('done')
+			return res.json('done')
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

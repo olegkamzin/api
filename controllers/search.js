@@ -9,7 +9,7 @@ class SearchController {
 			return Product.find().then(data => {
 				const fuse = new Fuse(data, { keys: ['model.name', 'brand.name', 'category.name'], minMatchCharLength: 2 })
 				return res.json(fuse.search(string, { limit: 10 }))
-			}).catch(error => res.status(400).json(error.message))
+			}).catch(error => res.status(400).json(error))
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

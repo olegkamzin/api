@@ -38,7 +38,7 @@ class ImagesController {
 				}
 				result.push(name)
 			}
-			res.json(result)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

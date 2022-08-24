@@ -35,7 +35,7 @@ class FilterController {
 				}
 				filter[el.property] = param
 			}
-			res.json(filter)
+			return res.json(filter)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

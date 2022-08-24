@@ -13,8 +13,8 @@ class CartController {
 			if (!product) return next(ApiError.badRequest('Товар указан не корректно.'))
 			if (!quantity) return next(ApiError.badRequest('Количество товара не указано.'))
 
-			const cart = await Cart.create({ user: userId, product: productId, quantity })
-			return res.json(cart)
+			const result = await Cart.create({ user: userId, product: productId, quantity })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -30,8 +30,8 @@ class CartController {
 			if (!product) return next(ApiError.badRequest('Товар указан не корректно.'))
 			if (!quantity) return next(ApiError.badRequest('Количество товара не указано.'))
 
-			const cart = await Cart.findByIdAndUpdate(id, { user: userId, product: productId, quantity }, { new: true })
-			return res.json(cart)
+			const result = await Cart.findByIdAndUpdate(id, { user: userId, product: productId, quantity }, { new: true })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -40,8 +40,8 @@ class CartController {
 	async get (req, res, next) {
 		try {
 			const { user } = req.params
-			const cart = await Cart.find({ user })
-			return res.json(cart)
+			const result = await Cart.find({ user })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
@@ -50,8 +50,8 @@ class CartController {
 	async delete (req, res, next) {
 		try {
 			const { id } = req.params
-			const cart = Cart.findByIdAndDelete(id)
-			return res.json(cart)
+			const result = Cart.findByIdAndDelete(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}

@@ -8,9 +8,9 @@ class OrderController {
 			const { user } = req.params
 			const cart = await Cart.find({ user })
 			if (cart.length === 0) return next(ApiError.badRequest('Товаров для заказа в корзине нет.'))
-			const order = await Order.create({ user, products: cart })
+			const result = await Order.create({ user, products: cart })
 			await Cart.deleteMany({ user })
-			return res.json(order)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -20,8 +20,8 @@ class OrderController {
 		try {
 			const { id } = req.params
 			const { products, address, other } = req.body
-			const order = await Order.findById(id, { products, address, other })
-			return res.json(order)
+			const result = await Order.findById(id, { products, address, other })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -30,8 +30,8 @@ class OrderController {
 	async get (req, res, next) {
 		try {
 			const { user } = req.params
-			const order = await Order.find({ user })
-			return res.json(order)
+			const result = await Order.find({ user })
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -39,8 +39,8 @@ class OrderController {
 
 	async getAll (req, res, next) {
 		try {
-			const order = await Order.find()
-			return res.json(order)
+			const result = await Order.find()
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
@@ -49,8 +49,8 @@ class OrderController {
 	async delete (req, res, next) {
 		try {
 			const { id } = req.params
-			const order = await Order.findByIdAndDelete(id)
-			return res.json(order)
+			const result = await Order.findByIdAndDelete(id)
+			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
 		}
