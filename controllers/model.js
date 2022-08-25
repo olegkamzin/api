@@ -6,10 +6,10 @@ import ApiError from '../service/error/ApiError.js'
 class ModelsController {
 	async post (req, res, next) {
 		try {
-			const { name, brand, description, rating } = req.body
+			const { name, brand, description, rating, country, img } = req.body
 			const brandFind = await Brand.findOne({ name: brand })
 			if (!brandFind) return res.status(400).json('Брэнд не найден')
-			const result = await Models.create({ name, brand: brandFind.id, description, rating, slug: genSlug(name, { lower: true }) })
+			const result = await Models.create({ name, brand: brandFind.id, description, rating, country, img, slug: genSlug(name, { lower: true }) })
 			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
