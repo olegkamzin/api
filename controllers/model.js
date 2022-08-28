@@ -21,11 +21,11 @@ class ModelsController {
 			const { id } = req.params
 			let { brand, name, slug } = req.body
 			if (brand) {
-				const brandFind = await Brand.findOne({ name: brand })
-				if (!brandFind) return res.status(400).json('Брэнд не найден')
+				brand = (await Brand.findOne({ name: brand }))._id
+				if (!brand) return res.status(400).json('Брэнд не найден')
 			}
 			if (name) slug = genSlug(name, { lower: true })
-			const result = await Models.findByIdAndUpdate(id, { $set: { ...req.body, slug } }, { new: true })
+			const result = await Models.findByIdAndUpdate(id, { $set: { ...req.body, slug, brand } }, { new: true })
 			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
