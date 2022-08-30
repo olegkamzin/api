@@ -17,8 +17,7 @@ class CategoryController {
 					if (el.type === 'variants' && el.variants.length === 0) return next(ApiError.badRequest('Варианты не указаны.'))
 				})
 			}
-			console.log(req.body)
-			const result = await Category.create(req.body)
+			const result = await Category.create({ ...req.body, slug })
 			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e.message))
@@ -28,10 +27,19 @@ class CategoryController {
 	async put (req, res, next) {
 		try {
 			const { id } = req.params
-			const { name, description, params } = req.body
-			let { slug } = req.body
+			let { slug, name, params } = req.body
+			if (slug && /[^-a-z]/g.test(slug)) return next(ApiError.badRequest('Ссылка должна быть на английском языке.'))
 			if (!slug) slug = genSlug(name, { lower: true })
-			const result = await Category.findByIdAndUpdate(id, { name, description, slug, params }, { new: true })
+			if (params !== 0) {
+				params.forEach(el => {
+					if (/[^_a-z]/g.test(el.property)) return next(ApiError.badRequest('Ключ должен быть на английском языке.'))
+					if (typeof el.required !== 'boolean') return next(ApiError.badRequest('Required должен иметь только "true/false" значение.'))
+					if (el.type === 'variants' && !Array.isArray(el.variants)) return next(ApiError.badRequest('Варианты должны быть массивом.'))
+					if (el.type === 'variants' && el.variants.length === 0) return next(ApiError.badRequest('Варианты не указаны.'))
+				})
+			}
+			console.log(req.body)
+			const result = await Category.findByIdAndUpdate(id, { ...req.body, slug }, { new: true })
 			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))

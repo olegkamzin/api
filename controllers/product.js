@@ -30,40 +30,6 @@ class ProductController {
 
 	async get (req, res, next) {
 		try {
-			let { page, limit, quantity, price_from } = req.query
-			if (quantity) req.query.quantity = { $gt: quantity }
-			if (price_from) req.query.price = { $gt: price_from }
-			page = page || 1
-			limit = limit || 20
-			let params = {}
-			for (const el in req.body) {
-				const paramName = `params.${el}`
-				params[paramName] = req.body[el]
-			}
-			params = JSON.parse(JSON.stringify(params))
-			const result = await Product.find(params)
-				.limit(limit)
-				.skip(page * limit - limit)
-			return res.json(result)
-		} catch (e) {
-			next(ApiError.badRequest(e))
-		}
-	}
-
-	async getOne (req, res, next) {
-		try {
-			const { id } = req.params
-			const result = await Product.findById(id)
-				.populate({ path: 'brand', model: 'Brand' })
-				.populate({ path: 'model', model: 'Model' })
-			return res.json(result)
-		} catch (e) {
-			next(ApiError.badRequest(e))
-		}
-	}
-
-	async getCategory (req, res, next) {
-		try {
 			let { category } = req.params
 			let { page, limit, quantity, price_from } = req.query
 			category = await Category.findOne({ slug: category })
@@ -91,6 +57,18 @@ class ProductController {
 				.limit(limit)
 				.skip(page * limit - limit)
 				// .select('-price')
+			return res.json(result)
+		} catch (e) {
+			next(ApiError.badRequest(e))
+		}
+	}
+
+	async getOne (req, res, next) {
+		try {
+			const { id } = req.params
+			const result = await Product.findById(id)
+				.populate({ path: 'brand', model: 'Brand' })
+				.populate({ path: 'model', model: 'Model' })
 			return res.json(result)
 		} catch (e) {
 			next(ApiError.badRequest(e))
