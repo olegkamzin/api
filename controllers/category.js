@@ -38,7 +38,6 @@ class CategoryController {
 					if (el.type === 'variants' && el.variants.length === 0) return next(ApiError.badRequest('Варианты не указаны.'))
 				})
 			}
-			console.log(req.body)
 			const result = await Category.findByIdAndUpdate(id, { ...req.body, slug }, { new: true })
 			return res.json(result)
 		} catch (e) {

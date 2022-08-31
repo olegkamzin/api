@@ -9,7 +9,6 @@ import cart from './cart.js'
 import order from './order.js'
 import filter from './filter.js'
 import image from './image.js'
-import vendor from './vendor.js'
 
 const router = new Router()
 
@@ -23,6 +22,5 @@ router.use('/cart', cart)
 router.use('/order', order)
 router.use('/filter', filter)
 router.use('/image', image)
-router.use('/vendor', vendor)
 
 export default router
