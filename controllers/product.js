@@ -46,7 +46,6 @@ class ProductController {
 				req.query.category = category._id
 				page = page || 1
 				limit = limit || 28
-				if (limit >= 200) limit = 200
 				const paramsCategory = category.params
 				let params = {}
 				for (const el in req.query) {
