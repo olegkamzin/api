@@ -64,21 +64,18 @@ class ProductController {
 				}
 				params = JSON.parse(JSON.stringify(params))
 				if (req.query.wholesale) {
-					const count = await Product.find(params).count()
 					const result = await Product
 						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
-					return res.json({ items: result, page: { count: count, pages: Math.ceil(count / limit) } })
-					// return res.json(result)
+					return res.json(result)
 				} else {
-					const count = await Product.find(params).count()
 					const result = await Product
 						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
 						.select('-wholesale_price')
-					return res.json({ items: result, page: { count: count, pages: Math.ceil(count / limit) } })
+					return res.json(result)
 				}
 			}
 		} catch (e) {
