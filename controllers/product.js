@@ -45,7 +45,8 @@ class ProductController {
 				if (price_from) req.query.price = { $gte: price_from }
 				req.query.category = category._id
 				page = page || 1
-				limit = limit || 20
+				limit = limit || 28
+				if (limit >= 200) limit = 200
 				const paramsCategory = category.params
 				let params = {}
 				for (const el in req.query) {
@@ -63,16 +64,21 @@ class ProductController {
 				}
 				params = JSON.parse(JSON.stringify(params))
 				if (req.query.wholesale) {
-					const result = await Product.find(params)
+					const count = await Product.find(params).count()
+					const result = await Product
+						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
-					return res.json(result)
+					return res.json({ items: result, page: { count: count, pages: Math.ceil(count / limit) } })
+					// return res.json(result)
 				} else {
-					const result = await Product.find(params)
+					const count = await Product.find(params).count()
+					const result = await Product
+						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
 						.select('-wholesale_price')
-					return res.json(result)
+					return res.json({ items: result, page: { count: count, pages: Math.ceil(count / limit) } })
 				}
 			}
 		} catch (e) {
