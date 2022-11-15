@@ -31,9 +31,9 @@ class ProductController {
 
 	async get (req, res, next) {
 		try {
-			if (req.query.id) {
-				const { id } = req.query
-				const result = await Product.findById(id)
+			if (req.body.items) {
+				const { items } = req.body
+				const result = await Product.find({ '_id': { $in: items } })
 					.populate({ path: 'brand', model: 'Brand' })
 					.populate({ path: 'model', model: 'Model' })
 				return res.json(result)
@@ -80,6 +80,16 @@ class ProductController {
 		} catch (e) {
 			next(ApiError.badRequest(e))
 		}
+	}
+
+	async getOne (req, res, next) {
+		const { id } = req.params
+		const result = await Product.findById(id)
+			.populate({ path: 'brand', model: 'Brand' })
+			.populate({ path: 'model', model: 'Model' })
+		return res.json(result)
+	} catch (e) {
+		next(ApiError.badRequest(e))
 	}
 
 	async delete (req, res, next) {
