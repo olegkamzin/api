@@ -33,7 +33,10 @@ class ProductController {
 		try {
 			if (req.body.items) {
 				const { items } = req.body
-				if (items.length > 1000) return next(ApiError.badRequest('Количество товаров запросе не должно превышать 500.'))
+				await items.forEach(el => {
+					if (el.length < 23) delete items[items.indexOf(el)]
+				})
+				if (items.length > 1000) return next(ApiError.badRequest('Количество товаров запросе не должно превышать 1000.'))
 				const result = await Product.find({ '_id': { $in: items } })
 					.populate({ path: 'brand', model: 'Brand' })
 					.populate({ path: 'model', model: 'Model' })
