@@ -66,19 +66,24 @@ class ProductController {
 					}
 				}
 				params = JSON.parse(JSON.stringify(params))
+				const items = await Product.countDocuments(params)
 				if (req.query.wholesale) {
 					const result = await Product
 						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
-					return res.json(result)
+					const total = []
+					const maxPage = Math.ceil(items / limit)
+					for (let el = 1; el <= maxPage; el++) {
+						total.push(el)
+					}
+					return res.json({ result, pages: { items, total, page: Number(page) } })
 				} else {
 					const result = await Product
 						.find(params)
 						.limit(limit)
 						.skip(page * limit - limit)
 						.select('-wholesale_price')
-					const items = await Product.countDocuments(params)
 					const total = []
 					const maxPage = Math.ceil(items / limit)
 					for (let el = 1; el <= maxPage; el++) {
