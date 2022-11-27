@@ -78,7 +78,13 @@ class ProductController {
 						.limit(limit)
 						.skip(page * limit - limit)
 						.select('-wholesale_price')
-					return res.json(result)
+					const items = await Product.countDocuments(params)
+					const total = []
+					const maxPage = Math.ceil(items / limit)
+					for (let el = 1; el <= maxPage; el++) {
+						total.push(el)
+					}
+					return res.json({ result, pages: { items, total, page: Number(page) } })
 				}
 			}
 		} catch (e) {
